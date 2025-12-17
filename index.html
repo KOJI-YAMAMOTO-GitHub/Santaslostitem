@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>サンタさんの落とし物報告</title>
+    <style>
+        /* 背景と全体のスタイル */
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: #0b1a3a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* 雪のスタイル */
+        .snow {
+            position: fixed;
+            top: -10px;
+            background-color: white;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.8;
+        }
+
+        @keyframes fall {
+            to { transform: translateY(105vh); }
+        }
+
+        /* コンテナ */
+        .container {
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            border-top: 10px solid #d42426;
+            position: relative;
+            z-index: 10;
+        }
+
+        h1 { color: #d42426; margin-bottom: 20px; font-size: 24px; }
+        .input-group { text-align: left; margin-bottom: 12px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 14px; }
+        input { width: 100%; padding: 10px; border: 2px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 16px; }
+        
+        button {
+            background-color: #2e7d32;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            border-radius: 50px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 15px;
+            transition: 0.3s;
+            box-shadow: 0 4px #1b5e20;
+        }
+        button:hover { background-color: #1b5e20; transform: translateY(-2px); }
+        button:active { transform: translateY(2px); box-shadow: none; }
+
+        /* プレゼント出現エリア */
+        #message-area { display: none; margin-top: 20px; }
+
+        /* プレゼント箱のスタイルとアニメーション */
+        .gift-box {
+            font-size: 80px;
+            cursor: pointer;
+            display: inline-block;
+            transition: transform 0.3s;
+            animation: bounce 1s infinite;
+        }
+        .gift-box:hover { transform: scale(1.2) rotate(10deg); }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* 中身が飛び出すアニメーション */
+        .surprise {
+            display: none;
+            font-size: 24px;
+            font-weight: bold;
+            color: #d42426;
+            margin-top: 15px;
+            animation: popUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes popUp {
+            from { opacity: 0; transform: scale(0.5); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .thank-you-msg { font-size: 18px; color: #555; margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1 id="title">🎅 サンタさんの落とし物報告</h1>
+    
+    <div id="form-area">
+        <div class="input-group"><label>お名前</label><input type="text" id="name" placeholder="キミの名前"></div>
+        <div class="input-group"><label>住所</label><input type="text" id="address" placeholder="どこに住んでるかな？"></div>
+        <div class="input-group"><label>拾ったモノ</label><input type="text" id="item" placeholder="何を拾った？"></div>
+        <div class="input-group"><label>拾った場所</label><input type="text" id="place" placeholder="どこに落ちてた？"></div>
+        <button onclick="reportLostItem()">拾ったよ</button>
+    </div>
+
+    <div id="message-area">
+        <p class="thank-you-msg">報告ありがとう！<br>サンタさんからお礼があるみたいだよ。<br><strong>箱をタップしてみて！</strong></p>
+        <div class="gift-box" id="gift" onclick="openGift()">🎁</div>
+        <div class="surprise" id="surprise-msg">
+            ✨ <span id="reward-item"></span> ✨<br>
+            それはキミにあげよう！
+        </div>
+    </div>
+</div>
+
+<script>
+    // 雪を降らせる
+    function createSnow() {
+        const snow = document.createElement('div');
+        snow.classList.add('snow');
+        const size = Math.random() * 5 + 2 + "px";
+        snow.style.width = size;
+        snow.style.height = size;
+        snow.style.left = Math.random() * 100 + "vw";
+        const duration = Math.random() * 5 + 3 + "s";
+        snow.style.animation = `fall ${duration} linear`;
+        document.body.appendChild(snow);
+        setTimeout(() => snow.remove(), parseFloat(duration) * 1000);
+    }
+    setInterval(createSnow, 200);
+
+    let foundItem = "";
+
+    function reportLostItem() {
+        const name = document.getElementById('name').value;
+        foundItem = document.getElementById('item').value;
+
+        if (!name || !foundItem) {
+            alert("サンタさんに教えるために、名前と拾ったモノを入れてね！");
+            return;
+        }
+
+        document.getElementById('form-area').style.display = 'none';
+        document.getElementById('message-area').style.display = 'block';
+        document.getElementById('title').innerText = "メリークリスマス！";
+    }
+
+    function openGift() {
+        const gift = document.getElementById('gift');
+        const surprise = document.getElementById('surprise-msg');
+        const reward = document.getElementById('reward-item');
+
+        // クリックされたら箱を「開いた状態」にする
+        gift.innerText = "🎉";
+        gift.style.animation = "none";
+        
+        // 拾ったモノをメッセージに反映
+        reward.innerText = foundItem;
+        
+        // メッセージを表示
+        surprise.style.display = 'block';
+    }
+</script>
+
+</body>
+</html>
