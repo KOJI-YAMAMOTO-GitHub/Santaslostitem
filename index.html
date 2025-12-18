@@ -107,22 +107,23 @@
 <body>
 
 <div class="container">
-    <h1 id="title">🎅 サンタさんの落とし物報告</h1>
+    <h1 id="title">🎅 おとしモノれんらく</h1>
     
     <div id="form-area">
-        <div class="input-group"><label>お名前</label><input type="text" id="name" placeholder="キミの名前"></div>
-        <div class="input-group"><label>住所</label><input type="text" id="address" placeholder="どこに住んでるかな？"></div>
-        <div class="input-group"><label>拾ったモノ</label><input type="text" id="item" placeholder="何を拾った？"></div>
-        <div class="input-group"><label>拾った場所</label><input type="text" id="place" placeholder="どこに落ちてた？"></div>
-        <button onclick="reportLostItem()">拾ったよ</button>
+        <div class="input-group"><label>おなまえ</label><input type="text" id="name" placeholder="キミのおなまえ"></div>
+        <div class="input-group"><label>じゅうしょ</label><input type="text" id="address" placeholder="どこにすんでるかな？"></div>
+        <div class="input-group"><label>ひろったモノ</label><input type="text" id="item" placeholder="なにをひろった？"></div>
+        <div class="input-group"><label>ひろったところ</label><input type="text" id="place" placeholder="どこにおちてた？"></div>
+        <button onclick="reportLostItem()">ひろったよ</button>
     </div>
 
     <div id="message-area">
-        <p class="thank-you-msg">報告ありがとう！<br>サンタさんからお礼があるみたいだよ。<br><strong>箱をタップしてみて！</strong></p>
+        <p class="thank-you-msg">れんらくありがとう！<br>どこにいったのかわからず、こまっていたんだ<br><strong>しんせつなキミにプレゼントをあげるよ</strong></p>
         <div class="gift-box" id="gift" onclick="openGift()">🎁</div>
         <div class="surprise" id="surprise-msg">
             ✨ <span id="reward-item"></span> ✨<br>
-            それはキミにあげよう！
+            は、あげます🎁<br>れんらくしてくれてありがとう✉️
+            <br>またひろったられんらくして下さい
         </div>
     </div>
 </div>
@@ -150,7 +151,7 @@
         foundItem = document.getElementById('item').value;
 
         if (!name || !foundItem) {
-            alert("サンタさんに教えるために、名前と拾ったモノを入れてね！");
+            alert("どこでひろったかおしえて");
             return;
         }
 
